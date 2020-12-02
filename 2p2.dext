@@ -1,0 +1,39 @@
+file = io.slurp("aoc/2p1.txt");
+clean_file = str.strip(file);
+
+lines = str.split(clean_file, "\n");
+clean_lines = arr.map(lines, str.strip);
+
+res = [0];
+
+arr.each(clean_lines) {
+    chars = str.chars($0);
+    index = [0];
+    def getchar() {
+        index[0] = index[0] + 1;
+        if (index[0] > arr.len(chars)) {
+            return nil;
+        };
+        return chars[index[0]-1];
+    };
+    min = 0;
+    max = 0;
+    chr = getchar();
+    while (chr != "-") {
+        min = min * 10 + str.ascii(chr) - str.ascii("0"); 
+        chr = getchar();
+    };
+    chr = getchar();
+    while (chr != " ") {
+        max = max * 10 + str.ascii(chr) - str.ascii("0"); 
+        chr = getchar();
+    };
+    letter = getchar();
+    begin = index[0] + 1;
+    if ((chars[begin + min] == letter)
+        != (chars[begin + max] == letter)) {
+        res[0] = res[0] + 1;
+    };
+};
+
+io.print(res[0]);

@@ -1,0 +1,26 @@
+file = io.slurp("aoc/1p1.txt");
+clean_file = str.strip(file);
+
+lines = str.split(clean_file, "\n");
+clean_lines = arr.map(lines, str.strip);
+
+nums = arr.map(clean_lines, str.to_number);
+
+found = [nil] * 3;
+
+arr.each(nums) {
+    a = $0;
+    arr.each(nums) {
+        b = $0;
+        arr.each(nums) {
+            c = $0;
+            if (a + b + c == 2020) {
+                found[0] = a;
+                found[1] = b;
+                found[2] = c;
+            };
+        };
+    };
+};
+
+io.print(found);
