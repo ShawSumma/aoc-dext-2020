@@ -1,0 +1,24 @@
+file = io.slurp("./3p1.txt");
+clean_file = str.strip(file);
+lines = str.split(clean_file, "\n");
+matrix = arr.map(lines, str.chars);
+
+y_max = arr.len(matrix);
+x_rem = arr.len(matrix[0]);
+
+def get1(x, y) {
+    if (x < 0 || y < 0 || y >= y_max) {
+        return false;
+    };
+    return matrix[y][x % x_rem] == "#";
+};
+
+sum = [0];
+
+arr.each(arr.range(y_max)) {
+    if (get1($0 * 3, $0)) {
+        sum[0] += 1;
+    };
+};
+
+io.print(sum[0]);

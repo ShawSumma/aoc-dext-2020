@@ -1,0 +1,35 @@
+
+file = io.slurp("./3p1.txt");
+clean_file = str.strip(file);
+lines = str.split(clean_file, "\n");
+matrix = arr.map(lines, str.chars);
+
+y_max = arr.len(matrix);
+x_rem = arr.len(matrix[0]);
+
+def get1(x, y) {
+    if (x < 0 || y < 0 || y >= y_max) {
+        return false;
+    };
+    return matrix[y][x % x_rem] == "#";
+};
+
+product = [1];
+
+arr.each([[1, 1], [1, 3], [1, 5], [1, 7], [2, 1]]) {
+    x_each = $0[1];
+    y_each = $0[0];
+    x = 0;
+    y = 0;
+    subproduct = 0;
+    while (y < y_max) {
+        if (get1(x, y)) {
+            subproduct += 1;
+        };
+        y += y_each;
+        x += x_each;
+    };
+    product[0] *= subproduct;
+};
+
+io.print(product[0]);

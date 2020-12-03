@@ -1,4 +1,4 @@
-file = io.slurp("aoc/1p1.txt");
+file = io.slurp("./1p1.txt");
 clean_file = str.strip(file);
 
 lines = str.split(clean_file, "\n");
