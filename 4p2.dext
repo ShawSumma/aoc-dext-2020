@@ -1,0 +1,100 @@
+def is_digit(d) {
+    return str.ascii("0")<= str.ascii(d) && str.ascii(d) <= str.ascii("9");
+};
+
+def is_hex_digit(d) {
+    return is_digit(d)
+        || (str.ascii("a")<= str.ascii(d) && str.ascii(d) <= str.ascii("f"));
+};
+
+matches = scope table {
+    def @byr(sval) {
+        byr = str.to_number(sval);
+        return str.len(sval) == 4 && 1920 <= byr && byr <= 2002;
+    };
+    
+    def @iyr(sval) {
+        iyr = str.to_number(sval);
+        return str.len(sval) == 4 && 2010 <= iyr && iyr <= 2020;
+    };
+    
+    def @eyr(sval) {
+        eyr = str.to_number(sval);
+        return str.len(sval) == 4 && 2020 <= eyr && eyr <= 2030;
+    };
+
+    def @hgt(hgt) {
+        letters = str.chars(hgt);
+        i = 0;
+        num = 0;
+        while (i < arr.len(letters) && is_digit(letters[i])) {
+            num = num * 10 + str.ascii(letters[i]) - str.ascii("0");
+            i += 1;
+        };
+        if (letters[arr.len(letters) - 2] == "i" && letters[arr.len(letters) - 1] == "n") {
+            return 59 <= num && num <= 76;
+        };
+        if (letters[arr.len(letters) - 2] == "c" && letters[arr.len(letters) - 1] == "m") {
+            return 150 <= num && num <= 193;
+        };
+        return false;
+    };
+
+    def @hcl(col) {
+        chars = str.chars(col);
+        return arr.len(chars) == 7 && chars[0] == "#"
+            && is_hex_digit(chars[1]) && is_hex_digit(chars[2])
+            && is_hex_digit(chars[3]) && is_hex_digit(chars[4])
+            && is_hex_digit(chars[5]) && is_hex_digit(chars[6]);
+    };
+
+    def @ecl(col) {
+        return col == "amb" || col == "blu" || col == "gry"
+            || col == "brn" || col == "grn" || col == "hzl" || col == "oth";
+    };
+
+    def @pid(pid) {
+        chars = str.chars(pid);
+        if (arr.len(chars) != 9) {
+            return false;
+        };
+        i = 0;
+        while (i < arr.len(chars)) {
+            if (is_digit(chars[i]) == false) {
+                return false;
+            };
+            i += 1;
+        };
+        return true;
+    };
+};
+
+lookfor = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
+
+file = io.slurp("./4p1.txt");
+passports = str.split(file, "\n\n");
+count = [0];
+arr.each(passports) {
+    fields = str.split($0, "\n", " ");
+    pairs = arr.map(fields) {
+        return str.split($0, ":");
+    };
+    notokay = arr.map(lookfor) {
+        return true;
+    };
+    arr.each(arr.range(arr.len(lookfor))) {
+        i = $0;
+        item = lookfor[i];
+        arr.each(pairs) {
+            if ($0[0] == item && matches[item]($0[1])) {
+                notokay[i] = false;
+            };
+        };
+    };
+    badcount = arr.filter(notokay, x => x);
+    if (arr.len(badcount) == 0) {
+        count[0] += 1;
+    };
+};
+
+io.print(count[0]);

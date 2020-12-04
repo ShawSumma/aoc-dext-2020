@@ -1,0 +1,26 @@
+lookfor = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
+file = io.slurp("./4p1.txt");
+passports = str.split(file, "\n\n");
+count = [0];
+arr.each(passports) {
+    fields = str.split($0, "\n", " ");
+    pairs = arr.map(fields) {
+        return str.split($0, ":");
+    };
+    notokay = arr.map(lookfor) {
+        return true;
+    };
+    arr.each(arr.range(arr.len(lookfor))) {
+        i = $0;
+        arr.each(pairs) {
+            if ($0[0] == lookfor[i]) {
+                notokay[i] = false;
+            };
+        };
+    };
+    badcount = arr.filter(notokay, x => x);
+    if (arr.len(badcount) == 0) {
+        count[0] += 1;
+    };
+};
+io.print(count[0]);
